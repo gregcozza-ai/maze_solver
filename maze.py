@@ -12,7 +12,7 @@ class Maze:
         num_cols: int,
         cell_size_x: float,
         cell_size_y: float,
-        win: Window,
+        win: Window | None = None,
     ) -> None:
         self.__cells: list[list[Cell]] = []
         self.__x1 = x1
@@ -49,4 +49,4 @@ class Maze:
         if self.__win is None:
             return
         self.__win.redraw()
-        time.sleep(0.05)
+        time.sleep(0.01)
