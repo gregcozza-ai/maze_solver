@@ -118,3 +118,49 @@ class Maze:
         for col in self.__cells:
             for cell in col:
                 cell.visited = False
+    
+    def solve(self) -> bool:
+        return self.__solve_r(0,0)
+    
+    def __solve_r(self, i: int, j: int) -> bool:
+        # Step 1: Animate
+        self.__animate()
+        
+        # Step 2: Mark current cell as visited
+        self.__cells[i][j].visited = True
+        
+        # Step 3: Check if at the end cell
+        if i == self.__num_cols - 1 and j == self.__num_rows - 1:
+            return True 
+        
+        # Setp 4: Try each direction
+        # Left
+        if i > 0 and not self.__cells[i][j].has_left_wall and not self.__cells[i - 1][j].visited:
+            self.__cells[i][j].draw_move(self.__cells[i - 1][j])
+            if self.__solve_r(i - 1, j):
+                return True 
+            self.__cells[i][j].draw_move(self.__cells[i - 1][j], True)
+            
+        # Right
+        if i < self.__num_cols - 1 and not self.__cells[i][j].has_right_wall and not self.__cells[i + 1][j].visited:
+            self.__cells[i][j].draw_move(self.__cells[i + 1][j])
+            if self.__solve_r(i + 1, j):
+                return True
+            self.__cells[i][j].draw_move(self.__cells[i + 1][j], True)
+            
+        # Up
+        if j > 0 and not self.__cells[i][j].has_top_wall and not self.__cells[i][j - 1].visited:
+            self.__cells[i][j].draw_move(self.__cells[i][j - 1])
+            if self.__solve_r(i, j - 1):
+                return True 
+            self.__cells[i][j].draw_move(self.__cells[i][j - 1], True)
+            
+        # Down
+        if j < self.__num_rows - 1 and not self.__cells[i][j].has_bottom_wall and not self.__cells[i][j + 1].visited:
+            self.__cells[i][j].draw_move(self.__cells[i][j + 1])
+            if self.__solve_r(i, j + 1):
+                return True 
+            self.__cells[i][j].draw_move(self.__cells[i][j + 1], True)
+            
+        # Step 5: No path found from here 
+        return False 
